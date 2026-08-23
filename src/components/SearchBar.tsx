@@ -7,6 +7,8 @@ interface SearchBarProps {
   value?: string;
   onChangeText?: (text: string) => void;
   onFilterPress?: () => void;
+  onCameraPress?: () => void;
+  onMicPress?: () => void;
   placeholder?: string;
 }
 
@@ -14,6 +16,8 @@ export default function SearchBar({
   value = "",
   onChangeText,
   onFilterPress,
+  onCameraPress,
+  onMicPress,
   placeholder = "Search party frocks, suits, shoes & toys...",
 }: SearchBarProps) {
   return (
@@ -38,10 +42,10 @@ export default function SearchBar({
           </TouchableOpacity>
         ) : (
           <View style={styles.rightIconsRow}>
-            <TouchableOpacity style={styles.iconAction}>
+            <TouchableOpacity onPress={onCameraPress} style={styles.iconAction}>
               <Ionicons name="camera-outline" size={18} color={Colors.textSecondary} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconAction}>
+            <TouchableOpacity onPress={onMicPress} style={styles.iconAction}>
               <Ionicons name="mic-outline" size={18} color={Colors.textSecondary} />
             </TouchableOpacity>
           </View>

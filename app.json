@@ -14,13 +14,19 @@
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png"
-      }
+      },
+      "package": "com.anonymous.MarketApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-asset"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "dc06b541-e8bb-4849-8c61-1ae8d7730bb1"
+      }
+    }
   }
 }

@@ -6,15 +6,25 @@ import Colors from "../constants/Colors";
 interface HeaderProps {
   cartCount: number;
   onOpenCart?: () => void;
+  onOpenNotifications?: () => void;
+  onOpenAuth?: () => void;
+  onOpenDeliveryTracking?: () => void;
   userName?: string;
   pincode?: string;
+  sparksBalance?: number;
+  unreadNotifCount?: number;
 }
 
 export default function Header({
   cartCount = 0,
   onOpenCart,
+  onOpenNotifications,
+  onOpenAuth,
+  onOpenDeliveryTracking,
   userName = "Madhumathi",
   pincode = "641001",
+  sparksBalance = 680,
+  unreadNotifCount = 3,
 }: HeaderProps) {
   return (
     <View style={styles.headerContainer}>
@@ -32,12 +42,16 @@ export default function Header({
         <View style={styles.rightActions}>
           <TouchableOpacity activeOpacity={0.8} style={styles.sparkleBox}>
             <Ionicons name="star" size={14} color={Colors.accent} style={{ marginRight: 3 }} />
-            <Text style={styles.starCount}>680</Text>
+            <Text style={styles.starCount}>{sparksBalance}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity activeOpacity={0.8} style={styles.iconBtn}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={onOpenNotifications}
+            style={styles.iconBtn}
+          >
             <Ionicons name="notifications-outline" size={22} color={Colors.white} />
-            <View style={styles.unreadDot} />
+            {unreadNotifCount > 0 && <View style={styles.unreadDot} />}
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -55,17 +69,27 @@ export default function Header({
         </View>
       </View>
 
-      {/* Delivery Bar Below Header */}
-      <View style={styles.deliverySubBar}>
-        <Ionicons name="location-sharp" size={14} color={Colors.white} style={{ marginRight: 4 }} />
-        <Text style={styles.deliverText}>
-          Deliver for <Text style={{ fontWeight: "800" }}>{userName}'s Kids</Text> • {pincode}
-        </Text>
-        <View style={styles.timerBadge}>
-          <Ionicons name="flash" size={10} color={Colors.primary} style={{ marginRight: 2 }} />
-          <Text style={styles.timerBadgeText}>1-Day Express</Text>
+      {/* Clean & Simple Delivery Bar */}
+      <TouchableOpacity
+        activeOpacity={0.85}
+        onPress={onOpenDeliveryTracking || onOpenAuth}
+        style={styles.deliverySubBar}
+      >
+        <View style={styles.deliveryLeftGroup}>
+          <Ionicons name="location-sharp" size={14} color={Colors.accent} style={{ marginRight: 5 }} />
+          <Text numberOfLines={1} style={styles.deliverText}>
+            Deliver to <Text style={{ fontWeight: "800" }}>{userName}'s Home</Text> • {pincode}
+          </Text>
         </View>
-      </View>
+
+        <View style={styles.rightExpressGroup}>
+          <View style={styles.timerBadge}>
+            <Ionicons name="flash" size={10} color={Colors.primary} style={{ marginRight: 2 }} />
+            <Text style={styles.timerBadgeText}>1-Day Express</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={14} color={Colors.white} style={{ marginLeft: 2 }} />
+        </View>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -173,18 +197,49 @@ const styles = StyleSheet.create({
   deliverySubBar: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.12)",
-    paddingHorizontal: 16,
-    paddingVertical: 6,
+    justifyContent: "space-between",
+    backgroundColor: "rgba(0, 0, 0, 0.16)",
+    paddingHorizontal: 14,
+    paddingVertical: 7,
     marginTop: 4,
     borderBottomLeftRadius: 18,
     borderBottomRightRadius: 18,
+    borderTopWidth: 1,
+    borderTopColor: "rgba(255, 255, 255, 0.12)",
+  },
+  deliveryLeftGroup: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  locationPinCircle: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: Colors.white,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.12,
+    shadowRadius: 2,
+    elevation: 2,
   },
   deliverText: {
     color: Colors.white,
-    fontSize: 12,
-    flex: 1,
+    fontSize: 11,
+    fontWeight: "600",
+  },
+  deliverySubText: {
+    color: "rgba(255, 255, 255, 0.85)",
+    fontSize: 10,
     fontWeight: "500",
+    marginTop: 1,
+  },
+  rightExpressGroup: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 8,
   },
   timerBadge: {
     flexDirection: "row",
@@ -192,7 +247,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 8,
+    borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
@@ -201,7 +256,7 @@ const styles = StyleSheet.create({
   },
   timerBadgeText: {
     color: Colors.primary,
-    fontSize: 10,
+    fontSize: 9.5,
     fontWeight: "900",
   },
 });

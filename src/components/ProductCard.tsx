@@ -5,12 +5,10 @@ import Colors from "../constants/Colors";
 import { Product } from "../constants/mockData";
 
 // Server base (without /api) — matches platform
-// Physical Android device uses LAN IP; iOS/web uses localhost
 const SERVER_BASE =
   Platform.OS === "android"
-    ? "http://192.23.1.52:5001"   // ← LAN IP for physical Android device
+    ? "http://10.226.185.65:5001"   // ← LAN IP for physical Android device
     : "http://localhost:5001";
-
 
 interface ProductCardProps {
   product: Product;
@@ -20,29 +18,26 @@ interface ProductCardProps {
   onRemoveFromCart?: (product: Product) => void;
   onToggleFavorite?: (productId: string) => void;
   onPressProduct?: (product: Product) => void;
+  onBuyNow?: (product: Product) => void;
+  style?: any;
 }
 
 const getImageUrl = (url?: string) => {
   if (!url) {
     return "https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=600&auto=format&fit=crop&q=80";
   }
-  // Full external URL (https / http from CDN or Cloudinary)
   if (url.startsWith("http")) {
-    // Rewrite any localhost or emulator addresses to the current SERVER_BASE
     if (Platform.OS === "android" &&
         (url.includes("localhost:5001") || url.includes("10.0.2.2:5001"))) {
       return url.replace(/http:\/\/(localhost|10\.0\.2\.2):5001/, SERVER_BASE);
     }
     return url;
   }
-  // Relative path from server (/uploads/xxx.jpg)
   if (url.startsWith("/")) {
     return `${SERVER_BASE}${url}`;
   }
   return url;
 };
-
-
 
 export default function ProductCard({
   product,
@@ -52,12 +47,20 @@ export default function ProductCard({
   onRemoveFromCart,
   onToggleFavorite,
   onPressProduct,
+  onBuyNow,
+  style,
 }: ProductCardProps) {
+  const handlePressCard = () => {
+    if (onPressProduct) {
+      onPressProduct(product);
+    }
+  };
+
   return (
     <TouchableOpacity
       activeOpacity={0.92}
-      onPress={() => onPressProduct && onPressProduct(product)}
-      style={styles.card}
+      onPress={handlePressCard}
+      style={[styles.card, style]}
     >
       {/* Top Header: Age Tag & Wishlist Heart Vector Icon */}
       <View style={styles.topHeader}>
@@ -78,22 +81,28 @@ export default function ProductCard({
         </TouchableOpacity>
       </View>
 
-      {/* Real Product Image */}
-      <View style={styles.imageBox}>
+      {/* Product Image Click -> Full Details Page */}
+      <TouchableOpacity activeOpacity={0.88} onPress={handlePressCard} style={styles.imageBox}>
         <Image
           source={{ uri: getImageUrl(product.imageUrl) }}
           style={styles.productImage}
           resizeMode="cover"
         />
-      </View>
+        {product.discount ? (
+          <View style={styles.discountBadgeOnImg}>
+            <Text style={styles.discountBadgeText}>
+              {product.discount.toUpperCase()}
+            </Text>
+          </View>
+        ) : null}
+      </TouchableOpacity>
 
-
-      {/* Product Details */}
+      {/* Product Details - Meesho Font & Layout */}
       <View style={styles.detailsBox}>
         <View style={styles.assuredRow}>
           {product.isAssured && (
             <View style={styles.assuredBadge}>
-              <MaterialCommunityIcons name="shield-check" size={12} color={Colors.primary} style={{ marginRight: 2 }} />
+              <MaterialCommunityIcons name="shield-check" size={11} color={Colors.primary} style={{ marginRight: 2 }} />
               <Text style={styles.assuredText}>Assured</Text>
             </View>
           )}
@@ -111,7 +120,7 @@ export default function ProductCard({
         <View style={styles.ratingRow}>
           <View style={styles.ratingPill}>
             <Text style={styles.ratingText}>{product.rating}</Text>
-            <Ionicons name="star" size={10} color={Colors.white} style={{ marginLeft: 2 }} />
+            <Ionicons name="star" size={9} color={Colors.white} style={{ marginLeft: 2 }} />
           </View>
           <Text style={styles.reviewsCountText}>
             ({product.reviewsCount.toLocaleString()})
@@ -131,35 +140,28 @@ export default function ProductCard({
           )}
         </View>
 
-        {/* Action Button with Vector Icons */}
-        {cartQuantity === 0 ? (
+        {/* Dual Action Buttons: Add to Bag & Buy Now */}
+        <View style={styles.dualActionRow}>
           <TouchableOpacity
             activeOpacity={0.85}
             onPress={() => onAddToCart && onAddToCart(product)}
-            style={styles.addToCartBtn}
+            style={styles.addOutlineBtn}
           >
-            <Ionicons name="bag-add" size={14} color={Colors.white} style={{ marginRight: 4 }} />
-            <Text style={styles.addToCartText}>ADD TO BAG</Text>
+            <Ionicons name="cart-outline" size={13} color={Colors.primary} style={{ marginRight: 3 }} />
+            <Text style={styles.addOutlineText}>
+              {cartQuantity > 0 ? `(${cartQuantity}) ADD` : "ADD"}
+            </Text>
           </TouchableOpacity>
-        ) : (
-          <View style={styles.quantityBox}>
-            <TouchableOpacity
-              onPress={() => onRemoveFromCart && onRemoveFromCart(product)}
-              style={styles.qtyBtn}
-            >
-              <Ionicons name="remove" size={14} color={Colors.white} />
-            </TouchableOpacity>
 
-            <Text style={styles.qtyText}>{cartQuantity}</Text>
-
-            <TouchableOpacity
-              onPress={() => onAddToCart && onAddToCart(product)}
-              style={styles.qtyBtn}
-            >
-              <Ionicons name="add" size={14} color={Colors.white} />
-            </TouchableOpacity>
-          </View>
-        )}
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={() => onBuyNow ? onBuyNow(product) : onAddToCart && onAddToCart(product)}
+            style={styles.buySolidBtn}
+          >
+            <Ionicons name="flash" size={12} color={Colors.white} style={{ marginRight: 3 }} />
+            <Text style={styles.buySolidText}>BUY NOW</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -168,18 +170,17 @@ export default function ProductCard({
 const styles = StyleSheet.create({
   card: {
     width: "48%",
-    minHeight: 335,
     backgroundColor: Colors.surface,
-    borderRadius: 16,
-    padding: 10,
+    borderRadius: 14,
+    padding: 9,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: Colors.border,
-    shadowColor: Colors.shadowColor,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    elevation: 3,
+    borderColor: "#F1F5F9",
+    shadowColor: "#64748B",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.07,
+    shadowRadius: 6,
+    elevation: 2,
     justifyContent: "space-between",
   },
   topHeader: {
@@ -190,59 +191,74 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   ageBadge: {
-    backgroundColor: Colors.secondaryLight,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 8,
+    backgroundColor: "#F0F9FF",
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    borderRadius: 6,
     borderWidth: 1,
-    borderColor: Colors.secondary,
+    borderColor: "#BAE6FD",
   },
   ageText: {
-    color: Colors.secondary,
-    fontSize: 10,
+    color: "#0284C7",
+    fontSize: 9,
     fontWeight: "800",
   },
   favoriteCircle: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
     backgroundColor: Colors.white,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.12,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
   imageBox: {
-    height: 125,
+    height: 135,
     width: "100%",
-    borderRadius: 12,
+    borderRadius: 10,
     overflow: "hidden",
-    backgroundColor: Colors.background,
+    backgroundColor: "#F8FAFC",
     marginBottom: 8,
+    position: "relative",
   },
   productImage: {
     width: "100%",
     height: "100%",
+  },
+  discountBadgeOnImg: {
+    position: "absolute",
+    bottom: 6,
+    left: 6,
+    backgroundColor: Colors.primary,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  discountBadgeText: {
+    color: Colors.white,
+    fontSize: 9,
+    fontWeight: "900",
   },
   detailsBox: {
     flex: 1,
     justifyContent: "space-between",
   },
   assuredRow: {
-    height: 18,
+    minHeight: 16,
     justifyContent: "center",
     marginBottom: 2,
   },
   assuredBadge: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Colors.primaryLight,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 6,
+    backgroundColor: "#FFF0F4",
+    paddingHorizontal: 5,
+    paddingVertical: 1,
+    borderRadius: 4,
     alignSelf: "flex-start",
   },
   assuredText: {
@@ -251,99 +267,104 @@ const styles = StyleSheet.create({
     fontWeight: "900",
   },
   productTitle: {
-    fontSize: 13,
+    fontSize: 12.5,
     fontWeight: "700",
-    color: Colors.textPrimary,
-    lineHeight: 17,
+    color: "#1E293B",
+    lineHeight: 16,
+    height: 32,
   },
   specsText: {
-    fontSize: 11,
-    color: Colors.textMuted,
-    marginTop: 2,
+    fontSize: 10,
+    color: "#64748B",
+    marginTop: 1,
   },
   ratingRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 5,
+    marginTop: 4,
   },
   ratingPill: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Colors.ratingGreen,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 6,
+    backgroundColor: "#038D63",
+    paddingHorizontal: 5,
+    paddingVertical: 1,
+    borderRadius: 5,
   },
   ratingText: {
     color: Colors.white,
-    fontSize: 10,
+    fontSize: 9,
     fontWeight: "800",
   },
   reviewsCountText: {
-    fontSize: 11,
-    color: Colors.textSecondary,
+    fontSize: 10,
+    color: "#64748B",
     marginLeft: 4,
   },
   priceRow: {
     flexDirection: "row",
     alignItems: "baseline",
-    marginTop: 6,
+    marginTop: 5,
     flexWrap: "wrap",
   },
   finalPrice: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: "900",
-    color: Colors.textPrimary,
+    color: "#0F172A",
     marginRight: 4,
   },
   originalPrice: {
-    fontSize: 11,
-    color: Colors.textMuted,
+    fontSize: 10,
+    color: "#94A3B8",
     textDecorationLine: "line-through",
-    marginRight: 4,
+    marginRight: 3,
   },
   discountText: {
-    fontSize: 11,
-    fontWeight: "800",
+    fontSize: 10,
+    fontWeight: "900",
     color: Colors.primary,
   },
-  addToCartBtn: {
+  dualActionRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 8,
+    gap: 4,
+  },
+  addOutlineBtn: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FFF0F4",
+    borderWidth: 1,
+    borderColor: Colors.primary,
+    borderRadius: 8,
+    paddingVertical: 6,
+  },
+  addOutlineText: {
+    color: Colors.primary,
+    fontSize: 9.5,
+    fontWeight: "800",
+  },
+  buySolidBtn: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: Colors.primary,
-    borderRadius: 10,
-    paddingVertical: 8,
-    marginTop: 8,
+    borderRadius: 8,
+    paddingVertical: 6.5,
     shadowColor: Colors.primary,
-    shadowOffset: { width: 0, height: 3 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
-    shadowRadius: 5,
+    shadowRadius: 3,
     elevation: 2,
   },
-  addToCartText: {
+  buySolidText: {
     color: Colors.white,
-    fontSize: 11,
-    fontWeight: "800",
-    letterSpacing: 0.3,
-  },
-  quantityBox: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: Colors.primary,
-    borderRadius: 10,
-    paddingHorizontal: 8,
-    paddingVertical: 5,
-    marginTop: 8,
-  },
-  qtyBtn: {
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-  },
-  qtyText: {
-    color: Colors.white,
-    fontSize: 12,
-    fontWeight: "800",
+    fontSize: 9.5,
+    fontWeight: "900",
+    letterSpacing: 0.2,
   },
 });

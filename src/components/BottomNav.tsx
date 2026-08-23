@@ -3,18 +3,20 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 
-export type TabType = "home" | "categories" | "notifications" | "profile" | "cart";
+export type TabType = "home" | "categories" | "wishlist" | "notifications" | "profile" | "cart";
 
 interface BottomNavProps {
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
   cartCount?: number;
+  wishlistCount?: number;
 }
 
 export default function BottomNav({
   activeTab,
   onTabChange,
   cartCount = 0,
+  wishlistCount = 0,
 }: BottomNavProps) {
   const tabs = [
     {
@@ -30,23 +32,17 @@ export default function BottomNav({
       inactiveIcon: "grid-outline" as const,
     },
     {
-      id: "notifications",
-      label: "Alerts",
-      activeIcon: "notifications-sharp" as const,
-      inactiveIcon: "notifications-outline" as const,
+      id: "wishlist",
+      label: "Wishlist",
+      activeIcon: "heart-sharp" as const,
+      inactiveIcon: "heart-outline" as const,
+      badge: wishlistCount,
     },
     {
       id: "profile",
       label: "Account",
       activeIcon: "person-sharp" as const,
       inactiveIcon: "person-outline" as const,
-    },
-    {
-      id: "cart",
-      label: "Cart",
-      activeIcon: "bag-handle-sharp" as const,
-      inactiveIcon: "bag-handle-outline" as const,
-      badge: cartCount,
     },
   ];
 
