@@ -15,9 +15,10 @@ import {
 // - Android Emulator: http://10.0.2.2:5001/api
 // - Physical Android Device (WiFi): http://192.23.1.52:5001/api
 export const API_BASE_URL =
-  Platform.OS === "android"
+  process.env.EXPO_PUBLIC_API_URL ||
+  (Platform.OS === "android"
     ? "http://10.226.185.65:5001/api"   // ← Your machine's LAN IP for physical device
-    : "http://localhost:5001/api";
+    : "http://localhost:5001/api");
 
 
 // Create Axios Instance
