@@ -32,7 +32,7 @@ export default function Header({
       <View style={styles.topRow}>
         <View style={styles.brandContainer}>
           <MaterialCommunityIcons name="crown" size={24} color={Colors.white} style={{ marginRight: 4 }} />
-          <Text style={styles.brandTitle}>TinyTots</Text>
+          <Text style={styles.brandTitle}>MathiraKids</Text>
           <View style={styles.vipPill}>
             <Text style={styles.vipText}>Kids Club</Text>
           </View>

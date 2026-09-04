@@ -33,8 +33,8 @@ const api: AxiosInstance = axios.create({
 
 // Storage keys for persistent authentication
 let authToken: string | null = null;
-const TOKEN_KEY = "@tinytots_auth_token";
-const USER_KEY = "@tinytots_user_profile";
+const TOKEN_KEY = "@mathirakids_auth_token";
+const USER_KEY = "@mathirakids_user_profile";
 
 export const getAuthToken = () => authToken;
 
@@ -344,7 +344,7 @@ export const verifyOtpAPI = async (phone: string, otp: string) => {
       const mockToken = "demo_jwt_token_" + Date.now();
       const mockUser = {
         name: `Kids Club Member (${phone.slice(-4)})`,
-        email: `user_${phone.slice(-4)}@tinytots.app`,
+        email: `user_${phone.slice(-4)}@mathirakids.app`,
         phone: phone.startsWith("+") ? phone : `+91 ${phone.slice(-10)}`,
         pincode: "641001",
         sparksBalance: 680,
@@ -428,7 +428,7 @@ export const fetchSparksRewardsAPI = async () => {
   const defaultSparks = {
     sparksBalance: 680,
     multiplier: "2X on Kids Fest",
-    tier: "TinyTots VIP Member",
+    tier: "MathiraKids VIP Member",
   };
 
   if (!authToken) {
@@ -457,7 +457,7 @@ export const fetchNotificationsAPI = async () => {
     return [
       {
         id: 1,
-        title: "🎉 TinyTots Kids Festival is LIVE!",
+        title: "🎉 MathiraKids Kids Festival is LIVE!",
         message: "Up to 50% OFF on Party Wear, Frocks & Suits.",
         type: "promo",
         time: "2h ago",
@@ -472,7 +472,7 @@ export const fetchNotificationsAPI = async () => {
       {
         id: 3,
         title: "⭐ 680 Sparks Credited",
-        message: "Sparks credited to your TinyTots VIP Kids Club Account.",
+        message: "Sparks credited to your MathiraKids VIP Kids Club Account.",
         type: "rewards",
         time: "1d ago",
       },

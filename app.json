@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "MarketApp",
+    "name": "MathiraKids",
     "slug": "MarketApp",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,13 +15,15 @@
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png"
       },
-      "package": "com.anonymous.MarketApp"
+      "package": "com.madhirakids.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-asset"
+      "expo-asset",
+      "expo-font",
+      "expo-status-bar"
     ],
     "extra": {
       "eas": {

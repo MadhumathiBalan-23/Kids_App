@@ -1,7 +1,7 @@
-# Kids_App — TinyTots Kids Mart React Native Mobile App
+# Kids_App — MathiraKids Kids Mart React Native Mobile App
 
 <p align="center">
-  <img src="./assets/icon.png" width="96" height="96" alt="TinyTots Logo" />
+  <img src="./assets/icon.png" width="96" height="96" alt="MathiraKids Logo" />
 </p>
 
 <p align="center">
@@ -70,7 +70,7 @@ All colors and visual tokens are defined in [`src/constants/Colors.ts`](./src/co
 ## 📁 Project Architecture & File Structure
 
 ```text
-MarketApp/
+MathiraKids/
 ├── assets/                       # App icons, splash screens & adaptive icons
 │   ├── icon.png
 │   ├── splash.png
@@ -146,7 +146,7 @@ graph TD
 
 ## 🔌 Backend & REST API Integration
 
-The app connects to the **TinyTots Kids Mart REST API** (`MarketAppAPI`) via [`src/services/api.ts`](./src/services/api.ts):
+The app connects to the **MathiraKids Kids Mart REST API** (`MathiraKidsAPI`) via [`src/services/api.ts`](./src/services/api.ts):
 
 * **Default Base URL:** `http://localhost:5001/api`
 
@@ -163,7 +163,7 @@ The app connects to the **TinyTots Kids Mart REST API** (`MarketAppAPI`) via [`s
 | `GET` | `/auth/me` | Fetches authenticated user account details |
 
 > [!NOTE]
-> If the API server is offline or unreachable, `MarketApp` gracefully falls back to the high-quality seed dataset in [`src/constants/mockData.ts`](./src/constants/mockData.ts) without interrupting user interaction.
+> If the API server is offline or unreachable, `MathiraKids` gracefully falls back to the high-quality seed dataset in [`src/constants/mockData.ts`](./src/constants/mockData.ts) without interrupting user interaction.
 
 ---
 
@@ -188,9 +188,9 @@ The app connects to the **TinyTots Kids Mart REST API** (`MarketAppAPI`) via [`s
 
 ### Installation
 
-1. **Navigate to the MarketApp directory:**
+1. **Navigate to the MathiraKids directory:**
    ```bash
-   cd D:\Madhumathi\React_Project\ReactNative\MarketApp
+   cd D:\Madhumathi\React_Project\ReactNative\MathiraKids
    ```
 
 2. **Install all dependencies:**
@@ -216,13 +216,13 @@ The app connects to the **TinyTots Kids Mart REST API** (`MarketAppAPI`) via [`s
 
 ## 🌐 Ecosystem
 
-This mobile application is part of the **TinyTots Kids Mart** multi-platform suite:
+This mobile application is part of the **MathiraKids Kids Mart** multi-platform suite:
 
 | Repository / Module | Tech Stack | Purpose |
 | :--- | :--- | :--- |
-| **`MarketApp`** *(this repo)* | React Native, Expo, TypeScript | Mobile Shopping App for Customers |
-| **`MarketAppAPI`** | Node.js, Express, REST | Central Backend API Server (`port 5001`) |
-| **`MarketAppAdmin`** | Next.js, React, Tailwind CSS | Web Admin Dashboard for Products & Orders |
+| **`MathiraKids`** *(this repo)* | React Native, Expo, TypeScript | Mobile Shopping App for Customers |
+| **`MathiraKidsAPI`** | Node.js, Express, REST | Central Backend API Server (`port 5001`) |
+| **`MathiraKidsAdmin`** | Next.js, React, Tailwind CSS | Web Admin Dashboard for Products & Orders |
 
 ---
 

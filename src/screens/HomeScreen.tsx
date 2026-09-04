@@ -71,7 +71,7 @@ export default function HomeScreen() {
   const [notifications, setNotifications] = useState<any[]>([
     {
       id: "n1",
-      title: "🎉 TinyTots Kids Festival is LIVE!",
+      title: "🎉 MathiraKids Kids Festival is LIVE!",
       message: "Up to 50% OFF on Party Wear, Frocks & Suits.",
       type: "promo",
       time: formatTimestampWithYear(new Date()),
@@ -86,7 +86,7 @@ export default function HomeScreen() {
     {
       id: "n3",
       title: "⭐ 680 Sparks Credited",
-      message: "Sparks credited to your TinyTots VIP Kids Club Account.",
+      message: "Sparks credited to your MathiraKids VIP Kids Club Account.",
       type: "rewards",
       time: formatTimestampWithYear(new Date(Date.now() - 3600000 * 24)),
     },
@@ -525,11 +525,11 @@ export default function HomeScreen() {
           await MarketService.saveStoredUser(profile);
           setIsAuthModalOpen(false);
           addNotification(
-            "👋 Welcome to TinyTots Kids Club!",
+            "👋 Welcome to MathiraKids Kids Club!",
             `Account created for ${authForm.name}. Earn 2X Sparks on every kids purchase!`,
             "rewards"
           );
-          Alert.alert("Account Created! 🎉", `Welcome to TinyTots, ${authForm.name}!`);
+          Alert.alert("Account Created! 🎉", `Welcome to MathiraKids, ${authForm.name}!`);
         }
       } else {
         const res = await MarketService.login(authForm.email, authForm.password);
@@ -1059,7 +1059,7 @@ export default function HomeScreen() {
             {userProfile.email ? `${userProfile.email} • ` : ""}{userProfile.phone}
           </Text>
           <Text style={{ fontSize: 11, color: Colors.accent, fontWeight: "800", marginTop: 4 }}>
-            TinyTots VIP Member • {userProfile.sparksBalance} Sparks
+            MathiraKids VIP Member • {userProfile.sparksBalance} Sparks
           </Text>
 
           <View style={{ flexDirection: "row", marginTop: 12 }}>
@@ -1125,12 +1125,12 @@ export default function HomeScreen() {
           }}>
             <MaterialCommunityIcons name={"crown" as any} size={16} color={Colors.white} style={{ marginRight: 6 }} />
             <Text style={{ fontSize: 11, fontWeight: "900", color: Colors.white, letterSpacing: 0.5 }}>
-              TINYTOTS VIP KIDS CLUB
+              MATHIRAKIDS VIP KIDS CLUB
             </Text>
           </View>
 
           <Text style={{ fontSize: 20, fontWeight: "900", color: Colors.white, textAlign: "center" }}>
-            Welcome to TinyTots! 🎈
+            Welcome to MathiraKids! 🎈
           </Text>
           
           <Text style={{ fontSize: 12, color: "rgba(255,255,255,0.9)", textAlign: "center", marginTop: 4, paddingHorizontal: 10, lineHeight: 18 }}>
@@ -1303,7 +1303,7 @@ export default function HomeScreen() {
                     ? "Mobile OTP Login"
                     : authMethod === "email"
                     ? "Email Login"
-                    : "Create TinyTots Account"}
+                    : "Create MathiraKids Account"}
                 </Text>
               </View>
               <TouchableOpacity onPress={() => setIsAuthModalOpen(false)}>
@@ -1795,7 +1795,7 @@ export default function HomeScreen() {
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={{ fontSize: 13, fontWeight: "800", color: "#15803D" }}>Arriving Tomorrow by 5:00 PM</Text>
-                  <Text style={{ fontSize: 11, color: Colors.textSecondary, marginTop: 1 }}>TinyTots 1-Day Express Air Cargo Shipping</Text>
+                  <Text style={{ fontSize: 11, color: Colors.textSecondary, marginTop: 1 }}>MathiraKids 1-Day Express Air Cargo Shipping</Text>
                 </View>
               </View>
 
@@ -1883,7 +1883,7 @@ export default function HomeScreen() {
               <View style={{ backgroundColor: "#FFF8E7", borderRadius: 12, padding: 12, borderWidth: 1, borderColor: "#FFE0B2", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                 <View>
                   <Text style={{ fontSize: 10, fontWeight: "800", color: "#B45309", letterSpacing: 0.5 }}>COURIER AGENT ASSIGNED</Text>
-                  <Text style={{ fontSize: 13, fontWeight: "800", color: Colors.black, marginTop: 2 }}>Kumar S (TinyTots Express)</Text>
+                  <Text style={{ fontSize: 13, fontWeight: "800", color: Colors.black, marginTop: 2 }}>Kumar S (MathiraKids Express)</Text>
                   <Text style={{ fontSize: 10, color: Colors.textSecondary, marginTop: 1 }}>Delivery Verification OTP: <Text style={{ fontWeight: "900", color: Colors.primary }}>5829</Text></Text>
                 </View>
                 <TouchableOpacity
